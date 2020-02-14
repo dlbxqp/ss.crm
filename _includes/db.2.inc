@@ -3,7 +3,8 @@ $пксбд = mysqli_connect( //Подключаемся к серверу ба�
  '127.0.0.1',
  '046822200_CRM',
  'e6:JVy4wxU69',
- 'dlbxqp_crm'
+ 'dlbxqp_crm',
+ 3306
 );
 
 if(mysqli_connect_errno()){

@@ -93,23 +93,23 @@ Form:nth-of-type(2) Div.buttons{ display: flex; justify-content: space-between }
   </div>
   <div>
    <label for=''>Город</label>
-   <input type='text' name='t_city' id='t_city' required ><!--disabled-->
+   <input type='text' name='t_city' id='t_city' required disabled>
   </div>
   <div>
    <label for=''>ИНН</label>
-   <input type='number' name='n_inn' id='n_inn' required ><!--disabled-->
+   <input type='number' name='n_inn' id='n_inn' required disabled>
   </div>
   <div>
    <label for=''>Cайт(-ы)</label>
-   <textarea name='ta_sites' id='ta_sites' ></textarea><!--disabled-->
+   <textarea name='ta_sites' id='ta_sites' disabled></textarea>
   </div>
   <div>
    <label for=''>Продукт(-ы) [id через пробел]</label>
-   <textarea name='ta_products' id='ta_products' ></textarea><!--disabled-->
+   <textarea name='ta_products' id='ta_products' disabled></textarea>
   </div>
   <div>
    <label for=''>Тип</label>
-   <select name='s_type' id='s_type' required ><!--disabled--><option disabled selected>Выбор обязателен</option><?=$type?></select>
+   <select name='s_type' id='s_type' required disabled><option disabled selected>Выбор обязателен</option><?=$type?></select>
   </div>
   <div>
    <label for=''>Специализация</label>
@@ -140,19 +140,19 @@ Form:nth-of-type(2) Div.buttons{ display: flex; justify-content: space-between }
    <input type='hidden' name='h_IoCP' id='h_IoCP'>
    <div>
     <label for=''>Фамимлия</label>
-    <input type='text' name='t_last' id='t_last' value='<?=$lastName?>' class='reset'>
+    <input type='text' name='t_last' id='t_last' class='reset'>
    </div>
    <div>
     <label for=''>Имя</label>
-    <input type='text' name='t_first' id='t_first' value='<?=$firstName?>' class='reset'>
+    <input type='text' name='t_first' id='t_first' class='reset'>
    </div>
    <div>
     <label for=''>Отчество</label>
-    <input type='text' name='t_patronymic' id='t_patronymic' value='<?=$patronymic?>' class='reset'>
+    <input type='text' name='t_patronymic' id='t_patronymic' class='reset'>
    </div>
    <div>
     <label for=''>Должность</label>
-    <input type='text' name='t_position' id='t_position' value='<?=$position?>' class='reset'>
+    <input type='text' name='t_position' id='t_position' class='reset'>
    </div>
    <div>
     <label for=''>Принятие решения</label>
@@ -160,11 +160,11 @@ Form:nth-of-type(2) Div.buttons{ display: flex; justify-content: space-between }
    </div>
    <div>
     <label for=''>Телефон(-ы)</label>
-    <textarea name='ta_phones' id='ta_phones'><?=$phones?></textarea>
+    <textarea name='ta_phones' id='ta_phones'></textarea>
    </div>
    <div>
     <label for=''>eMail(s) </label>
-    <textarea name='ta_eMails' id='ta_eMails'><?=$eMails?></textarea>
+    <textarea name='ta_eMails' id='ta_eMails'></textarea>
    </div>
   </div>
 

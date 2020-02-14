@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="1f3b1440-b479-4a0a-a782-406225b4b3de" name="jCRM.SS" url="https://crm.servostar.ru">
+        <fileTransfer host="dlbxqp.myjino.ru" port="2222" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions controlEncoding="UTF-8" dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="2222" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
