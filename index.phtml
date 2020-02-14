@@ -1,0 +1,158 @@
+<?
+session_start();
+require "{$_SERVER[DOCUMENT_ROOT]}/_includes/options.inc";
+?>
+<!DOCTYPE html>
+<?
+//< Замок
+$url = '/_php/pages/a/i.php';
+if(isset($_SESSION['3aмoк'])){
+ $мрз = explode('|', $_SESSION['3aмoк']); //Массив разбора замка
+ $_dateOfEntrOfUser = $мрз[0];
+ $_loginOfCurrentUser = $мрз[1];
+
+ if($_dateOfEntrOfUser !== date('ymd')){
+  unset($_SESSION['3aмoк']);
+  ип('Alert', 'Время сессии истекло - повторите вход в систему');
+  //header("Location: {$_NoH}"); exit();
+ } else{
+  $url = '/_php/pages/t/i.php';
+  $scripts = "<script src='/_js/forms.js'></script>";
+  $then = <<<HD
+() => {
+ const aTr = document.querySelectorAll('TBody > Tr');
+ let IoC
+ aTr.forEach((v) => {
+  v.childNodes.forEach((vv, kk) => {
+   if(kk === 0){ IoC = vv.innerHTML }
+   if(kk === 1){ v.setAttribute('onClick', `openForm('` + IoC + `')`) }
+  })
+ })
+}
+HD;
+ }
+}
+//> Замок
+?>
+<html lang='ru'>
+<head>
+ <meta charset='utf-8'>
+ <meta http-equiv='X-UA-Compatible' content='ie=edge'>
+ <meta name='viewport' content='width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0'>
+ <meta name='author' content='dlbxqp@gmail.com'>
+ <meta name='theme-color' content='#404040'>
+ <meta name='publisher-URL' content='//'>
+
+ <title></title>
+
+ <link rel='shortcut icon'  href='/_images/favicon.ico' type='image/x-icon'>
+
+ <link rel='stylesheet' href='/_css/normalize.css'>
+ <link rel='stylesheet' href='/_css/main.css'>
+ <link rel='stylesheet' href='/_css/project.css'>
+
+ <script src='//unpkg.com/axios/dist/axios.min.js'></script>
+ <!--[if IE]>
+ <script>
+document.createElement('figcaption')
+document.createElement('article')
+document.createElement('section')
+document.createElement('header')
+document.createElement('figure')
+document.createElement('footer')
+document.createElement('aside')
+document.createElement('main')
+document.createElement('menu')
+document.createElement('nav')
+ </script>
+<![endif]-->
+ </head>
+
+ <body>
+  <header>
+   <style>
+Body > Header > Section{
+
+}
+
+
+
+@media all and (max-width: 320px){}
+   </style>
+
+   <section></section>
+
+   <script></script>
+  </header>
+
+  <main>
+   <section id='one'>
+    <style>
+Body > Main > Section#one{  }
+
+
+
+@media all and (max-width: 320px){}
+    </style>
+
+    <div id='main'></div>
+
+    <script>
+axios({
+ method: 'post',
+ url: '<?=$url?>',
+ data: {}
+}).then((response) => {
+ document.querySelector('Div#main').innerHTML = response.data
+}).then(<?=$then?>).catch(function(error){ console.log(error) })
+    </script>
+   </section>
+  </main>
+
+  <footer>
+   <style>
+Body > Footer > Section{
+
+}
+
+
+
+@media all and (max-width: 320px){}
+   </style>
+
+   <section></section>
+
+   <script></script>
+  </footer>
+
+  <aside>
+   <style>
+Body > Aside{
+  background: radial-gradient(circle, black, rgba(0, 0, 0, 0.72));
+  opacity: 0;
+  position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: -1;
+  transition: var(--transition)
+}
+
+Body > Aside > Div{
+  display: flex; justify-content: center; align-items: center;
+  height: 100vh
+}
+
+Body > Aside Div#aside{
+  overflow-y: auto;
+  max-height: calc(100vh - (2rem * 2))
+}
+
+Body > Aside.active{
+  opacity: 1;
+  z-index: 9
+}
+   </style>
+
+   <div>
+    <div id='aside'></div>
+   </div>
+  </aside>
+<?=$scripts?></body>
+</html>
