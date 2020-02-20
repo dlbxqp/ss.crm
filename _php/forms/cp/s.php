@@ -38,7 +38,7 @@ FROM `contact_persones`
 
 WHERE `IoC` = '{$_POST['IoC']}'
 
-ORDER BY `Index` DESC
+ORDER BY `Index` ASC
 HD;
 $respond = mysqli_query($пксбд, $request) OR die($SQLError . mysqli_error($пксбд));
 if(mysqli_num_rows($respond) === 1){

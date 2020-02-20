@@ -17,6 +17,7 @@ require "{$_SERVER['DOCUMENT_ROOT']}/_includes/db.2.inc";
 $request = <<<HD
 SELECT
  `customers`.`Index`,
+ LEFT(`0_loyalty`.`Name`, 1) AS `Л`,
  `customers`.`Name` AS `Наименование организации`,
  `customers`.`City` AS `Город`,
  `customers`.`INN` AS `ИНН`,
@@ -26,8 +27,6 @@ SELECT
  `customers`.`Comments` AS ``,
  `customers`.`Products` AS ``,
 */
- 
- `0_loyalty`.`Name` AS `Лояльность`,
  `0_status`.`Name` AS `Статус`,
  `0_type`.`Name` AS `Тип`
  
@@ -46,8 +45,8 @@ while($aV = mysqli_fetch_assoc($respond)){
   if(!isset($tr['thead'])){ $th .= "<th>{$k}</th>"; }
   $td .= "<td>{$v}</td>";
  }
- $tr['thead'] .= $th; unset($th);
- $tr['tbody'] .= $td; unset($td);
+ $tr['thead'] .= "<tr>$th</tr>"; unset($th);
+ $tr['tbody'] .= "<tr>$td</tr>"; unset($td);
 }
 $thead = $tr['thead'];
 $tbody = $tr['tbody'];
@@ -57,12 +56,27 @@ unset($tr)
 
 
 <style>
-Table Tr:hover{ background-color: rgba(250, 200, 0, 0.2) }
+Table Tr > Td{ border: none; border-bottom: 1px dotted white }
+Table Tr:hover > Td{ border-bottom-color: black }
 
 Table Tr > *:first-child{ display: none }
+
+
+Div#add{
+ background-color: rgb(60, 60, 60);
+ border-radius: 1rem 0 0 0;
+ color: white;
+ font-size: 2rem; font-weight: bolder;
+ line-height: 1;
+ opacity: 0.2;
+ padding: 0.6rem 1rem;
+ position: fixed; right: 1rem; bottom: 1rem
+}
+Div#add:hover{ opacity: 1 }
 </style>
 
 <table>
  <thead><?=$thead?></thead>
  <tbody><?=$tbody?></tbody>
 </table>
+<div id='add' onClick='addCustomer()'>+</div>

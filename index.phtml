@@ -5,7 +5,16 @@ require "{$_SERVER[DOCUMENT_ROOT]}/_includes/options.inc";
 <!DOCTYPE html>
 <?
 //< Замок
-$url = '/_php/pages/a/i.php';
+$script = <<<HD
+axios({
+ method: 'post',
+ url: '/_php/pages/a/i.php',
+ data: {}
+}).then((response) => {
+ document.querySelector('Div#main').innerHTML = response.data
+}).catch(function(error){ console.log(error) })
+
+HD;
 if(isset($_SESSION['3aмoк'])){
  $мрз = explode('|', $_SESSION['3aмoк']); //Массив разбора замка
  $_dateOfEntrOfUser = $мрз[0];
@@ -14,22 +23,9 @@ if(isset($_SESSION['3aмoк'])){
  if($_dateOfEntrOfUser !== date('ymd')){
   unset($_SESSION['3aмoк']);
   ип('Alert', 'Время сессии истекло - повторите вход в систему');
-  //header("Location: {$_NoH}"); exit();
  } else{
-  $url = '/_php/pages/t/i.php';
-  $scripts = "<script src='/_js/forms.js'></script>";
-  $then = <<<HD
-() => {
- const aTr = document.querySelectorAll('TBody > Tr');
- let IoC
- aTr.forEach((v) => {
-  v.childNodes.forEach((vv, kk) => {
-   if(kk === 0){ IoC = vv.innerHTML }
-   if(kk === 1){ v.setAttribute('onClick', `openForm('` + IoC + `')`) }
-  })
- })
-}
-HD;
+  $script = "getTable()\r\n";
+  $scripts = "\r\n  <script src='/_js/scripts.js'></script>\r\n";
  }
 }
 //> Замок
@@ -96,16 +92,6 @@ Body > Main > Section#one{  }
     </style>
 
     <div id='main'></div>
-
-    <script>
-axios({
- method: 'post',
- url: '<?=$url?>',
- data: {}
-}).then((response) => {
- document.querySelector('Div#main').innerHTML = response.data
-}).then(<?=$then?>).catch(function(error){ console.log(error) })
-    </script>
    </section>
   </main>
 
@@ -154,5 +140,9 @@ Body > Aside.active{
     <div id='aside'></div>
    </div>
   </aside>
-<?=$scripts?></body>
+<?=$scripts?>
+  <script>
+<?=$script?>
+  </script>
+ </body>
 </html>

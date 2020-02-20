@@ -16,8 +16,8 @@ function validateAll($s){
 
 function validateText($s){
  //$s = htmlspecialchars($s);
- $s = preg_replace('#[A-Za-z]{3,6}:\/\/#','',  $s); //Удаление протоколов
- $s = str_replace('/', '-', $s);
+ //$s = preg_replace('#[A-Za-z]{3,6}:\/\/#','',  $s); //Удаление протоколов
+ //$s = str_replace('/', '-', $s);
 
  return validateAll($s);
 }
@@ -27,7 +27,6 @@ function validateNumbers($s){
 
  return $s;
 }
-
 
 function validateHTML($s){
  $мз = Array( //Массив замены

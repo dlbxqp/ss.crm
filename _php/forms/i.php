@@ -89,27 +89,27 @@ Form:nth-of-type(2) Div.buttons{ display: flex; justify-content: space-between }
   <input type='hidden' name='h_IoC' id='h_IoC'>
   <div>
    <label for=''>Наименование</label>
-   <input type='text' name='t_name' id='t_name' required ><!--disabled-->
+   <input type='text' name='t_name' id='t_name' required>
   </div>
   <div>
    <label for=''>Город</label>
-   <input type='text' name='t_city' id='t_city' required disabled>
+   <input type='text' name='t_city' id='t_city' required>
   </div>
   <div>
    <label for=''>ИНН</label>
-   <input type='number' name='n_inn' id='n_inn' required disabled>
+   <input type='number' name='n_inn' id='n_inn' required>
   </div>
   <div>
    <label for=''>Cайт(-ы)</label>
-   <textarea name='ta_sites' id='ta_sites' disabled></textarea>
+   <textarea name='ta_sites' id='ta_sites'></textarea>
   </div>
   <div>
    <label for=''>Продукт(-ы) [id через пробел]</label>
-   <textarea name='ta_products' id='ta_products' disabled></textarea>
+   <textarea name='ta_products' id='ta_products'></textarea>
   </div>
   <div>
    <label for=''>Тип</label>
-   <select name='s_type' id='s_type' required disabled><option disabled selected>Выбор обязателен</option><?=$type?></select>
+   <select name='s_type' id='s_type' required><option disabled selected>Выбор обязателен</option><?=$type?></select>
   </div>
   <div>
    <label for=''>Специализация</label>
@@ -132,9 +132,9 @@ Form:nth-of-type(2) Div.buttons{ display: flex; justify-content: space-between }
  <form>
   <div>
    <div class='buttons'>
-    <button type='button' id='b_prev'><</button>
+    <button type='button' id='b_prev' disabled><</button>
     <button type='button' id='b_new'>+</button>
-    <button type='button' id='b_next'>></button>
+    <button type='button' id='b_next' disabled>></button>
    </div>
 
    <input type='hidden' name='h_IoCP' id='h_IoCP'>

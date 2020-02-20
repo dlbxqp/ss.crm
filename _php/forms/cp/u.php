@@ -31,7 +31,7 @@ $authority = (int)$_POST['s_authority'];
 
 #< New
 if($indexOfContactPerson == ''){
- $request = "SELECT `Index` FROM `contact_persones` WHERE `IoC` = '{$indexOfCustomer}' ORDER BY `Index` DESC LIMIT 1";
+ $request = "SELECT `Index` FROM `contact_persones` WHERE `IoC` = '{$indexOfCustomer}' AND (`Last` = '' AND `First` = '') ORDER BY `Index` DESC LIMIT 1";
  $respond = mysqli_query($пксбд, $request) OR die($SQLError . mysqli_error($пксбд));
  if(mysqli_num_rows($respond) < 1){
   $indexOfContactPerson = base_convert(date('ymdHis'), 10, 16);
