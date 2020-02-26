@@ -87,7 +87,7 @@ function getDataOfC(data){
 
   if(response.data.Name !== ''){ document.querySelector('#t_name').setAttribute('disabled', 'true') }
   if(response.data.City !== ''){ document.querySelector('#t_city').setAttribute('disabled', 'true') }
-  if(response.data.INN < 10){ document.querySelector('#n_inn').setAttribute('disabled', 'true') }
+  if(response.data.INN.lenght < 10){ document.querySelector('#n_inn').setAttribute('disabled', 'true') }
   if(response.data.Sites !== ''){ document.querySelector('#ta_sites').setAttribute('disabled', 'true') }
   if(response.data.Products !== ''){ document.querySelector('#ta_products').setAttribute('disabled', 'true') }
  }).catch((error) => { console.log(error) })
