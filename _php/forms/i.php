@@ -54,20 +54,57 @@ if(mysqli_num_rows($respond) > 0){
 Div#forms{
   background-color: white;
   display: flex; /*align-items: flex-start;*/
-  position: relative
+  position: relative;
+  max-width: 96rem
 }
 
-Form{
- overflow-y: auto;
- /*position: sticky; top: 0*/
+Form{ overflow-y: auto }
+
+
+Form Div{
+  padding: 0 1rem;
+  margin-bottom: 1rem
 }
 
+Div#commentaries{
+  background-color: rgba(0, 60, 60, 0.08);
+  padding: 1rem
+}
 
-Form Div{ padding: 0 1rem }
-Form Div{ margin-bottom: 1rem }
+Div#commentaries > Div{
+  background-color: white;
+  border: 1px solid black; border-bottom: none;
+  margin-bottom: 0;
+  overflow-y: auto; resize: vertical;
+  padding: 0;
+  width: 100%; height: 50px
+}
+Div#commentaries > Div > Div{
+  font-size: 1.2rem;
+  padding: 1rem
+}
+Div#commentaries > Div > Div:nth-of-type(odd){
+  background-color: rgba(0, 0, 0, 0.04)
+}
+Div#commentaries > Div > Div > Strong{
+ display: block;
+ font-size: 1rem;
+ margin-bottom: 0.4rem;
+ text-transform: uppercase
+}
+Div#commentaries > Div > Div > Strong > I{
+  font-weight: 400;
+  margin-left: 0.4rem
+}
+Div#commentaries > Div > Div > P{  }
+
+Div#commentaries > Textarea{ border-top: 1px dashed black }
+
 
 Label{
+  display: inline-block;
   font-family: sans-serif; font-size: 1rem;
+  margin-bottom: 0.4rem;
   text-transform: uppercase
 }
 
@@ -75,8 +112,16 @@ Label{
 Form:nth-of-type(1),
 Form:nth-of-type(2) > Div:first-of-type{ padding: 1rem 0 }
 
+Form:nth-of-type(1){
+  margin-right: 1px;
+  width: calc(100% - 36rem)
+}
+
 Form:nth-of-type(2){ position: relative }
-Form:nth-of-type(2) > Div:first-of-type{ background-color: rgba(60, 60, 0, 0.08) }
+Form:nth-of-type(2) > Div:first-of-type{
+  background-color: rgba(60, 60, 0, 0.08);
+  position: sticky; top: 0
+}
 Form:nth-of-type(2) > Div:last-of-type{
   text-align: right;
   position: absolute; right: 0; bottom: 0; left: 0
@@ -88,44 +133,45 @@ Form:nth-of-type(2) Div.buttons{ display: flex; justify-content: space-between }
  <form>
   <input type='hidden' name='h_IoC' id='h_IoC'>
   <div>
-   <label for=''>Наименование</label>
-   <input type='text' name='t_name' id='t_name' required>
+   <label for='t_name'>Наименование</label>
+   <input name='t_name' id='t_name' required>
   </div>
   <div>
-   <label for=''>Город</label>
-   <input type='text' name='t_city' id='t_city' required>
+   <label for='t_city'>Город</label>
+   <input name='t_city' id='t_city' required>
   </div>
   <div>
-   <label for=''>ИНН</label>
+   <label for='n_inn'>ИНН</label>
    <input type='number' name='n_inn' id='n_inn' required>
   </div>
   <div>
-   <label for=''>Cайт(-ы)</label>
+   <label for='ta_sites'>Cайт(-ы)</label>
    <textarea name='ta_sites' id='ta_sites'></textarea>
   </div>
   <div>
-   <label for=''>Продукт(-ы) [id через пробел]</label>
+   <label for='ta_products'>Продукт(-ы) [id через пробел]</label>
    <textarea name='ta_products' id='ta_products'></textarea>
   </div>
   <div>
-   <label for=''>Тип</label>
+   <label for='s_type'>Тип</label>
    <select name='s_type' id='s_type' required><option disabled selected>Выбор обязателен</option><?=$type?></select>
   </div>
   <div>
-   <label for=''>Специализация</label>
-   <input type='text' name='t_specialization' id='t_specialization' value='<?=$specialization?>'>
+   <label for='t_specialization'>Специализация</label>
+   <input name='t_specialization' id='t_specialization' value='<?=$specialization?>'>
   </div>
   <div>
-   <label for=''>Лояльность</label>
+   <label for='s_loyalty'>Лояльность</label>
    <select name='s_loyalty' id='s_loyalty' required><option disabled selected>Выбор обязателен</option><?=$loyalty?></select>
   </div>
   <div>
-   <label for=''>Статус</label>
+   <label for='s_status'>Статус</label>
    <select name='s_status' id='s_status' required><option disabled selected>Выбор обязателен</option><?=$status?></select>
   </div>
-  <div>
-   <label for=''>Комментарий</label>
-   <textarea name='ta_comments' id='ta_comments'><?=$comments?></textarea>
+  <div id='commentaries'>
+   <label for='ta_commentaries'>Комментарии (Сохранить > Alt + Enter)</label>
+   <div></div>
+   <textarea name='ta_commentaries' id='ta_commentaries'></textarea>
   </div>
  </form>
 

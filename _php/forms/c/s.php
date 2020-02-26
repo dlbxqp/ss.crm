@@ -1,8 +1,6 @@
 <?php
 session_start();
 
-$_POST = json_decode(file_get_contents('php://input'), true);
-
 //< Замок
 if(empty($_SESSION['3aмoк'])){
  unset($_SESSION['3aмoк']);
@@ -10,6 +8,8 @@ if(empty($_SESSION['3aмoк'])){
  exit();
 }
 //> Замок
+
+$_POST = json_decode(file_get_contents('php://input'), true);
 
 require "{$_SERVER['DOCUMENT_ROOT']}/_includes/options.inc";
 require "{$_SERVER['DOCUMENT_ROOT']}/_includes/db.2.inc";
@@ -24,7 +24,6 @@ SELECT
  `INN`,
  `Sites`,
  `Specialization`,
- `Comments`,
  `Products`,
  
  `IoL`,

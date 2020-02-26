@@ -24,7 +24,7 @@ function getTable(){
    else if(aTd[1].textContent === 'g'){ aTd[1].style.backgroundColor = 'rgba(0, 255, 0, 0.12)'; v.style.backgroundColor = 'rgba(0, 255, 0, 0.08)' }
    else if(aTd[1].textContent === 'y'){ aTd[1].style.backgroundColor = 'rgba(255, 255, 0, 0.12)'; v.style.backgroundColor = 'rgba(255, 255, 0, 0.08)' }
   })
- }).catch(function(error){ console.log(error) })
+ }).catch((error) => { console.log(error) })
 }
 
 function openForm(id){
@@ -37,8 +37,9 @@ function openForm(id){
  }).then(function(response){
   asideDivDiv.innerHTML = response.data
   getDataOfC( {IoC: id})
+  gsCommentaries(id)
   getDataOfCP({IoC: id})
- }).catch(function(error){ console.log(error) })
+ }).catch((error) => { console.log(error) })
 }
 
 function addCustomer(){
@@ -48,7 +49,7 @@ function addCustomer(){
   data: {IoC: ''}
  }).then((response) => {
   openForm(response.data)
- }).catch(function(error){ console.log(error) })
+ }).catch((error) => { console.log(error) })
 }
 
 function getDataOfC(data){
@@ -64,12 +65,24 @@ function getDataOfC(data){
   document.querySelector('#ta_sites').value = response.data.Sites
   document.querySelector('#t_specialization').value = response.data.Specialization
   document.querySelector('#ta_products').value = response.data.Products
-  document.querySelector('#ta_comments').value = response.data.Comments
   document.querySelector('#s_status').value = response.data.IoS
   document.querySelector('#s_type').value = response.data.IoT
-  //+
-  document.querySelector('#s_loyalty').value = response.data.IoL
-  document.querySelector('#s_loyalty').style.backgroundColor = document.querySelector(`#s_loyalty Option[value='${response.data.IoL}']`).textContent
+  //< Loyalty
+  {
+   const sLoyalty = document.querySelector('#s_loyalty')
+   sLoyalty.value = response.data.IoL
+   const currentLoyalty = sLoyalty.querySelector(`Option[value="${response.data.IoL}"]`)
+   if(currentLoyalty !== null){
+    const colorOfLoyalty = currentLoyalty.textContent
+
+    if(colorOfLoyalty === 'red'){ sLoyalty.style.backgroundColor = 'rgba(255, 0, 0, 0.12)' }
+    else if(colorOfLoyalty === 'green'){ sLoyalty.style.backgroundColor = 'rgba(0, 255, 0, 0.12)' }
+    else if(colorOfLoyalty === 'yellow'){ sLoyalty.style.backgroundColor = 'rgba(255, 255, 0, 0.12)' }
+    else if(colorOfLoyalty === 'grey'){ sLoyalty.style.backgroundColor = 'rgba(0, 0, 0, 0.12)' }
+    else{ console.log('colorOfLoyalty = ', colorOfLoyalty) }
+   }
+  }
+  //> Loyalty
 
 
   if(response.data.Name !== ''){ document.querySelector('#t_name').setAttribute('disabled', 'true') }
@@ -77,8 +90,34 @@ function getDataOfC(data){
   if(response.data.INN < 10){ document.querySelector('#n_inn').setAttribute('disabled', 'true') }
   if(response.data.Sites !== ''){ document.querySelector('#ta_sites').setAttribute('disabled', 'true') }
   if(response.data.Products !== ''){ document.querySelector('#ta_products').setAttribute('disabled', 'true') }
- }).catch(function(error){ console.log(error) })
+ }).catch((error) => { console.log(error) })
 }
+
+function gsCommentaries(IoC = document.querySelector('#h_IoC').value){
+ const oData = {}
+ oData.IoC = IoC
+ if(document.querySelector('#ta_commentaries').value.length > 0){
+  oData.Comment = document.querySelector('#ta_commentaries').value
+ }
+
+ let commentaries = ''
+ let date = null
+
+ axios({
+  method: 'post',
+  url: `/_php/forms/c_s/iu.php`,
+  data: oData
+ }).then((response) => {
+  for(v of response.data){
+   const a_Date = v[0].match(/..?/g)
+   date = `${a_Date[3]}:${a_Date[4]}:${a_Date[5]} ${a_Date[2]}-${a_Date[1]}-20${a_Date[0]}`
+
+   commentaries += `<div><strong>${v[2]}<i>(${date})</i></strong><p>${v[1]}</p></div>`
+  }
+  document.querySelector('Div#commentaries > Div').innerHTML = commentaries
+ }).catch((error) => { console.log(error) })
+}
+document.addEventListener('keydown', (e) => { if(e.code === 'Enter' && e.altKey){ gsCommentaries() } })
 
 function getDataOfCP(data){
  axios({
@@ -122,7 +161,7 @@ function getDataOfCP(data){
    e.target.closest('Div#forms Form:last-of-type').reset()
    document.querySelector('#h_IoCP').value = ''
   })
- }).catch(function(error){ console.log(error) })
+ }).catch((error) => { console.log(error) })
 }
 
 function updateForms(){
@@ -137,7 +176,7 @@ function updateForms(){
    data
   }).then(function(response){
    document.querySelector('#h_Io' + B.toUpperCase()).value = response.data
-  }).catch(function(error){ console.log(error) })
+  }).catch((error) => { console.log(error) })
  }
 
  f('fir', 'c')

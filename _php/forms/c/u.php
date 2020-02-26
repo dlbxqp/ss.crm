@@ -1,8 +1,6 @@
 <?php
 session_start();
 
-$_POST = json_decode(file_get_contents('php://input'), true);
-
 //< Замок
 if(empty($_SESSION['3aмoк'])){
  unset($_SESSION['3aмoк']);
@@ -10,6 +8,8 @@ if(empty($_SESSION['3aмoк'])){
  exit();
 }
 //> Замок
+
+$_POST = json_decode(file_get_contents('php://input'), true);
 
 require "{$_SERVER['DOCUMENT_ROOT']}/_includes/options.inc";
 require "{$_SERVER['DOCUMENT_ROOT']}/_includes/db.2.inc";
@@ -24,7 +24,6 @@ $inn = (int)$_POST['n_inn'];
 $sites = validateText($_POST['ta_sites']);
 $specialization = validateText($_POST['t_specialization']);
 $products = validateText($_POST['ta_products']);
-$comments = validateText($_POST['ta_comments']);
 $loyalty = (int)$_POST['s_loyalty'];
 $status = (int)$_POST['s_status'];
 $type = (int)$_POST['s_type'];
@@ -55,7 +54,6 @@ SET
 `Sites` = '{$sites}',
 `Specialization` = '{$specialization}',
 `Products` = '{$products}',
-`Comments` = '{$comments}',
 `IoL` = '{$loyalty}',
 `IoS` = '{$status}',
 `IoT` = '{$type}'
