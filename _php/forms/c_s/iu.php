@@ -34,7 +34,7 @@ if(isset($_POST['Comment'])){
 
 #< Получение
 $aCommentaries = Array();
-$request = "SELECT `Time`, `Content`, `LoA` FROM `0_commentaries` WHERE `IoC` = '{$_POST['IoC']}' ORDER BY `Time` DESC";
+$request = "SELECT `Time`, `Content`, `LoA` FROM `0_commentaries` WHERE `IoC` = '{$_POST['IoC']}' ORDER BY `Time` ASC";
 $respond = mysqli_query($пксбд, $request) OR die($SQLError . mysqli_error($пксбд));
 while($aV = mysqli_fetch_assoc($respond)){
  $aCommentaries[] = Array($aV['Time'], $aV['Content'], $aV['LoA']);

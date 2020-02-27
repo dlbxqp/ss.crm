@@ -9,6 +9,8 @@ if(empty($_SESSION['3aмoк'])){
  header("Location: //{$_SERVER['HTTP_HOST']}/");
  exit();
 }
+$мрз = explode('|', $_SESSION['3aмoк']); //Массив разбора замка
+$_groupOfCurrentUser = (int)$мрз[2];
 //> Замок
 
 require "{$_SERVER['DOCUMENT_ROOT']}/_includes/options.inc";
@@ -22,7 +24,6 @@ if(isset($_POST['IoCP'])){
  $aA = mysqli_fetch_assoc($respond);
  $_POST['IoC'] = $aA['IoC'];
 }
-//
 $request = <<<HD
 SELECT
  `Index`,
@@ -51,6 +52,7 @@ if(mysqli_num_rows($respond) === 1){
  }
  $aA['IoCPs'] = trim($B);
 }
+$aA['Group of current user'] = $_groupOfCurrentUser;
 
 
 

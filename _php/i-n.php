@@ -16,7 +16,8 @@ if(empty($_POST['l']) OR empty($_POST['p'])){
  $request = <<<HD
 SELECT
  `Login`,
- `Accessibility`
+ `Accessibility`,
+ `Group`
 
 FROM `users`
  
@@ -30,11 +31,12 @@ HD;
   if(mysqli_num_rows($respond) == 1){
    while($aV = mysqli_fetch_assoc($respond)){
     $l = $aV['Login'];
-    $Д = $aV['Accessibility'] * 1;
+    $Д = (int)$aV['Accessibility'];
+    $g = (int)$aV['Group'];
    }
 
    if($Д != 1){ ип('Alert', 'Вам ограничен доступ. Свяжитесь с разработчиком'); }
-   else{ $_SESSION['3aмoк'] = date('ymd') . '|' . $l; }
+   else{ $_SESSION['3aмoк'] = date('ymd') . '|' . $l . '|' . $g; }
   } else{ ип('Alert', 'Пользователей с таким логином и паролем не найдено в системе'); }
  } else{ die(printf("Ошибка чтения из таблицы БД `users`: %s\r\n", mysqli_error($пксбд))); }
 

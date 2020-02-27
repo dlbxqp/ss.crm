@@ -19,6 +19,7 @@ if(isset($_SESSION['3aмoк'])){
  $мрз = explode('|', $_SESSION['3aмoк']); //Массив разбора замка
  $_dateOfEntrOfUser = $мрз[0];
  $_loginOfCurrentUser = $мрз[1];
+ $_groupOfCurrentUser = $мрз[2];
 
  if($_dateOfEntrOfUser !== date('ymd')){
   unset($_SESSION['3aмoк']);

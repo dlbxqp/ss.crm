@@ -23,6 +23,7 @@ function getTable(){
    if(aTd[1].textContent === 'r'){ aTd[1].style.backgroundColor = 'rgba(255, 0, 0, 0.12)'; v.style.backgroundColor = 'rgba(255, 0, 0, 0.08)' }
    else if(aTd[1].textContent === 'g'){ aTd[1].style.backgroundColor = 'rgba(0, 255, 0, 0.12)'; v.style.backgroundColor = 'rgba(0, 255, 0, 0.08)' }
    else if(aTd[1].textContent === 'y'){ aTd[1].style.backgroundColor = 'rgba(255, 255, 0, 0.12)'; v.style.backgroundColor = 'rgba(255, 255, 0, 0.08)' }
+   else if(aTd[1].textContent === 's'){ aTd[1].style.backgroundColor = 'rgba(0, 0, 0, 0.12)'; v.style.backgroundColor = 'rgba(0, 0, 0, 0.08)' }
   })
  }).catch((error) => { console.log(error) })
 }
@@ -34,12 +35,12 @@ function openForm(id){
   method: 'post',
   url: '/_php/forms/i.php',
   data: {id: id}
- }).then(function(response){
+ }).then((response) => {
   asideDivDiv.innerHTML = response.data
   getDataOfC( {IoC: id})
   gsCommentaries(id)
   getDataOfCP({IoC: id})
- }).catch((error) => { console.log(error) })
+ }).then(() => { validation(id) }).catch((error) => { console.log(error) })
 }
 
 function addCustomer(){
@@ -61,7 +62,7 @@ function getDataOfC(data){
   document.querySelector('#h_IoC').value = response.data.Index
   document.querySelector('#t_name').value = response.data.Name
   document.querySelector('#t_city').value = response.data.City
-  document.querySelector('#n_inn').value = (+response.data.INN === NaN) ? 0 : +response.data.INN
+  document.querySelector('#t_inn').value = (+response.data.INN === NaN) ? 0 : +response.data.INN
   document.querySelector('#ta_sites').value = response.data.Sites
   document.querySelector('#t_specialization').value = response.data.Specialization
   document.querySelector('#ta_products').value = response.data.Products
@@ -78,18 +79,19 @@ function getDataOfC(data){
     if(colorOfLoyalty === 'red'){ sLoyalty.style.backgroundColor = 'rgba(255, 0, 0, 0.12)' }
     else if(colorOfLoyalty === 'green'){ sLoyalty.style.backgroundColor = 'rgba(0, 255, 0, 0.12)' }
     else if(colorOfLoyalty === 'yellow'){ sLoyalty.style.backgroundColor = 'rgba(255, 255, 0, 0.12)' }
-    else if(colorOfLoyalty === 'grey'){ sLoyalty.style.backgroundColor = 'rgba(0, 0, 0, 0.12)' }
+    else if(colorOfLoyalty === 'silver'){ sLoyalty.style.backgroundColor = 'rgba(0, 0, 0, 0.12)' }
     else{ console.log('colorOfLoyalty = ', colorOfLoyalty) }
    }
   }
   //> Loyalty
 
-
-  if(response.data.Name !== ''){ document.querySelector('#t_name').setAttribute('disabled', 'true') }
-  if(response.data.City !== ''){ document.querySelector('#t_city').setAttribute('disabled', 'true') }
-  if(response.data.INN.lenght < 10){ document.querySelector('#n_inn').setAttribute('disabled', 'true') }
-  if(response.data.Sites !== ''){ document.querySelector('#ta_sites').setAttribute('disabled', 'true') }
-  if(response.data.Products !== ''){ document.querySelector('#ta_products').setAttribute('disabled', 'true') }
+  if(response.data['Group of current user'] !== 1){
+   if(response.data.Name !== ''){ document.querySelector('#t_name').setAttribute('disabled', 'true') }
+   if(response.data.City !== ''){ document.querySelector('#t_city').setAttribute('disabled', 'true') }
+   if(response.data.INN.length === 10){ document.querySelector('#t_inn').setAttribute('disabled', 'true') }
+   if(response.data.Sites !== ''){ document.querySelector('#ta_sites').setAttribute('disabled', 'true') }
+   if(response.data.Products !== ''){ document.querySelector('#ta_products').setAttribute('disabled', 'true') }
+  }
  }).catch((error) => { console.log(error) })
 }
 
@@ -115,6 +117,7 @@ function gsCommentaries(IoC = document.querySelector('#h_IoC').value){
    commentaries += `<div><strong>${v[2]}<i>(${date})</i></strong><p>${v[1]}</p></div>`
   }
   document.querySelector('Div#commentaries > Div').innerHTML = commentaries
+  document.querySelector('#ta_commentaries').value = ''
  }).catch((error) => { console.log(error) })
 }
 document.addEventListener('keydown', (e) => { if(e.code === 'Enter' && e.altKey){ gsCommentaries() } })
@@ -133,6 +136,16 @@ function getDataOfCP(data){
   document.querySelector('#s_authority').value = (response.data.IoA === undefined) ? '' : response.data.IoA
   document.querySelector('#ta_phones').value = (response.data.Phones === undefined) ? '' : response.data.Phones
   document.querySelector('#ta_eMails').value = (response.data.eMails === undefined) ? '' : response.data.eMails
+
+  if(response.data['Group of current user'] !== 1){
+   if(response.data.Last !== ''){ document.querySelector('#t_last').setAttribute('disabled', 'true') }
+   if(response.data.First !== ''){ document.querySelector('#t_first').setAttribute('disabled', 'true') }
+   if(response.data.Patronymic !== ''){ document.querySelector('#t_patronymic').setAttribute('disabled', 'true') }
+   if(response.data.Position !== ''){ document.querySelector('#t_position').setAttribute('disabled', 'true') }
+   if(response.data.IoA !== ''){ document.querySelector('#s_authority').setAttribute('disabled', 'true') }
+   if(response.data.Phones !== ''){ document.querySelector('#ta_phones').setAttribute('disabled', 'true') }
+   if(response.data.eMails !== ''){ document.querySelector('#ta_eMails').setAttribute('disabled', 'true') }
+  }
 
   return {'IoCP': response.data.Index, 'IoCPs': response.data.IoCPs}
  }).then(({IoCP, IoCPs}) => {
@@ -164,29 +177,66 @@ function getDataOfCP(data){
  }).catch((error) => { console.log(error) })
 }
 
-function updateForms(){
- const f = (A, B) => {
-  let aElementsOfForm = document.querySelector(`Div#forms > Form:${A}st-of-type`).elements
-  data = {}
-  for(k in aElementsOfForm){ data[aElementsOfForm[k].name] = aElementsOfForm[k].value }
-  if(B !== ''){ data.h_IoC = document.querySelector(`#h_IoC`).value }
-  axios({
-   method: 'post',
-   url: `/_php/forms/${B}/u.php`,
-   data
-  }).then(function(response){
-   document.querySelector('#h_Io' + B.toUpperCase()).value = response.data
-  }).catch((error) => { console.log(error) })
- }
-
- f('fir', 'c')
- f('la', 'cp')
-
+const updateForms = (A, B) => {
+ let aElementsOfForm = document.querySelector(`Div#forms > Form:${A}st-of-type`).elements
+ data = {}
+ for(k in aElementsOfForm){ data[aElementsOfForm[k].name] = aElementsOfForm[k].value }
+ if(B !== ''){ data.h_IoC = document.querySelector(`#h_IoC`).value }
+ axios({
+  method: 'post',
+  url: `/_php/forms/${B}/u.php`,
+  data
+ }).then((response) => {
+  document.querySelector('#h_Io' + B.toUpperCase()).value = response.data
+ }).catch((error) => { console.log(error) })
+}
+function updateC(){
+ updateForms('fir', 'c')
+ aside.classList.remove('active')
  getTable()
 }
+function updateCP(){ updateForms('la', 'cp') }
 
 document.addEventListener('mousedown', (e) => {
  if(e.target.closest('Div#aside') === null){
   aside.classList.remove('active')
  }
 })
+
+//< Validation
+function validation(IoC){
+ //< ИНН
+ let t_inn = (e) => {
+  if(!(+e.target.value === NaN)){ e.target.value = e.target.value.replace(/\D/g, '') }
+  if(e.target.value.length === 10){
+   axios({
+    method: 'post',
+    url: `/_php/forms/validation/c.inn.php`,
+    data: {
+     INN: e.target.value,
+     IoC
+    }
+   }).then((response) => {
+    if(response.data){ e.target.classList.remove('incorrect') }
+    else{ e.target.classList.add('incorrect') }
+   }).then(toggleButton).catch((error) => { console.log(error) })
+  } else{
+   e.target.classList.add('incorrect')
+  }
+
+  toggleButton()
+ }
+ document.querySelector('#t_inn').oninput = t_inn
+ document.querySelector('#t_inn').onpaste = t_inn
+ //> ИНН
+
+ function toggleButton(){
+  const button = document.querySelector('Form > Div > Button')
+  if(document.querySelector('.incorrect')){
+   button.setAttribute('disabled', 'true')
+  } else{
+   button.removeAttribute('disabled')
+  }
+ }
+}
+//> Validation

@@ -77,7 +77,7 @@ Div#commentaries > Div{
   margin-bottom: 0;
   overflow-y: auto; resize: vertical;
   padding: 0;
-  width: 100%; height: 50px
+  width: 100%; /*height: 50px*/
 }
 Div#commentaries > Div > Div{
   font-size: 1.2rem;
@@ -127,6 +127,11 @@ Form:nth-of-type(2) > Div:last-of-type{
   position: absolute; right: 0; bottom: 0; left: 0
 }
 Form:nth-of-type(2) Div.buttons{ display: flex; justify-content: space-between }
+
+.incorrect{
+  border-color: red;
+  color: red
+}
 </style>
 
 <div id='forms'>
@@ -141,8 +146,8 @@ Form:nth-of-type(2) Div.buttons{ display: flex; justify-content: space-between }
    <input name='t_city' id='t_city' required>
   </div>
   <div>
-   <label for='n_inn'>ИНН</label>
-   <input type='number' name='n_inn' id='n_inn' required>
+   <label for='t_inn'>ИНН</label>
+   <input name='t_inn' id='t_inn' required>
   </div>
   <div>
    <label for='ta_sites'>Cайт(-ы)</label>
@@ -180,6 +185,7 @@ Form:nth-of-type(2) Div.buttons{ display: flex; justify-content: space-between }
    <div class='buttons'>
     <button type='button' id='b_prev' disabled><</button>
     <button type='button' id='b_new'>+</button>
+    <button type='button' onClick='updateCP()'>✓</button>
     <button type='button' id='b_next' disabled>></button>
    </div>
 
@@ -215,7 +221,7 @@ Form:nth-of-type(2) Div.buttons{ display: flex; justify-content: space-between }
   </div>
 
   <div>
-   <button type='button' onClick='updateForms()'>Сохранить</button>
+   <button type='button' onClick='updateC()'>Сохранить</button>
   </div>
  </form>
 </div>

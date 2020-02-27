@@ -59,7 +59,8 @@ unset($tr)
 Table Tr > Td{ border: none; border-bottom: 1px dotted white }
 Table Tr:hover > Td{ border-bottom-color: black }
 
-Table Tr > *:first-child{ display: none }
+Table Tr > *:nth-child(1),
+Table Tr > *:nth-child(2){ display: none }
 
 
 Div#add{

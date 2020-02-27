@@ -20,7 +20,7 @@ require "{$_SERVER['DOCUMENT_ROOT']}/_includes/validatingOfFields.inc";
 $indexOfCustomer = $_POST['h_IoC'];
 $name = validateText($_POST['t_name']);
 $city = validateText($_POST['t_city']);
-$inn = (int)$_POST['n_inn'];
+$inn = (int)$_POST['t_inn'];
 $sites = validateText($_POST['ta_sites']);
 $specialization = validateText($_POST['t_specialization']);
 $products = validateText($_POST['ta_products']);

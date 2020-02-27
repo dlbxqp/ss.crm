@@ -7,6 +7,8 @@ if(empty($_SESSION['3aмoк'])){
  header("Location: //{$_SERVER['HTTP_HOST']}/");
  exit();
 }
+$мрз = explode('|', $_SESSION['3aмoк']); //Массив разбора замка
+$_groupOfCurrentUser = (int)$мрз[2];
 //> Замок
 
 $_POST = json_decode(file_get_contents('php://input'), true);
@@ -16,6 +18,7 @@ require "{$_SERVER['DOCUMENT_ROOT']}/_includes/db.2.inc";
 
 
 
+$aA['Group of current user'] = $_groupOfCurrentUser;
 $aA['Index'] = $_POST['IoC'];
 $request = <<<HD
 SELECT

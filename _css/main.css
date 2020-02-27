@@ -6,7 +6,7 @@
   margin: 0; padding: 0;
   outline: none
 }
-*[onClick], Button:not(:disabled){ cursor: pointer }
+*[onClick], Button:not([disabled]){ cursor: pointer }
 *,
 *::before,
 *::after{
