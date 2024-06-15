@@ -1,4 +1,4 @@
-<?
+<?php
 $a_HTTPHost = explode('.', $_SERVER['HTTP_HOST']);
 if(end($a_HTTPHost) == 'crm'){
  $пксбд = mysqli_connect( //Подключаемся к серверу баз данных

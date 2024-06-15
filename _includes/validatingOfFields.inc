@@ -23,20 +23,20 @@ function validateText($s){
 }
 
 function validateNumbers($s){
- $s = preg_replace('#[^\d\s]#ui','', $s);
+ $s = preg_replace('/[^\d]/','', $s);
 
- return $s;
+ return trim($s);
 }
 
 function validateHTML($s){
- $мз = Array( //Массив замены
+ $мз = [ //Массив замены
   '</p>' => '</p>\n',
   '<p>\n</p>' => ' ',
   '<p>&nbsp;</p>' => ' ',
   ' />' => '>',
   ' </' => '</',
   "'" => '"'
- );
+ ];
  $s = strtr($s, $мз);
 
  return validateAll($s);

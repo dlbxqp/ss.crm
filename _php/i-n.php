@@ -6,11 +6,11 @@ if(stripos($_SERVER['HTTP_REFERER'], $_SERVER['HTTP_HOST']) === FALSE){
  exit();
 }
 
-require "{$_SERVER[DOCUMENT_ROOT]}/_includes/options.inc";
+require "{$_SERVER['DOCUMENT_ROOT']}/_includes/options.inc";
 if(empty($_POST['l']) OR empty($_POST['p'])){
  ип('Alert', 'Проверте раскладку клавиатуры и не включена ли клавиша CapsLock, а затем повторите попытку');
 } else{
- require "{$_SERVER[DOCUMENT_ROOT]}/_includes/db.1.inc";
+ require "{$_SERVER['DOCUMENT_ROOT']}/_includes/db.1.inc";
 
  $p = md5($_POST['p']);
  $request = <<<HD
@@ -20,10 +20,10 @@ SELECT
  `Group`
 
 FROM `users`
- 
+
 WHERE `Login` = '{$_POST['l']}'
 AND `Password` = '{$p}'
- 
+
 ORDER BY 'Login' ASC LIMIT 1
 
 HD;

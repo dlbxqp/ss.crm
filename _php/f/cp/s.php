@@ -29,10 +29,12 @@ SELECT
  `Index`,
  `Last`,
  `First`,
+ `Name`,
  `Patronymic`,
  `Position`,
  `Phones`,
  `eMails`,
+ `cpDate`,
  `IoA`
 
 FROM `contact_persones`
@@ -47,7 +49,7 @@ if(mysqli_num_rows($respond) === 1){
  $aA['IoCPs'] = $aA['Index'];
 } else{
  while($aV = mysqli_fetch_assoc($respond)){
-  if(!isset($_POST['IoCP']) OR $aV['Index'] == $_POST['IoCP']){ $aA = $aV; }
+  (!isset($_POST['IoCP']) OR $aV['Index'] == $_POST['IoCP']) && ($aA = $aV);
   $B .= $aV['Index'] . ' ';
  }
  $aA['IoCPs'] = trim($B);

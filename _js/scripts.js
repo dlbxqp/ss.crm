@@ -4,7 +4,7 @@ const asideDivDiv = document.querySelector('Div#aside')
 function getTable(){
  axios({
   method: 'post',
-  url: '/_php/pages/t/i.php',
+  url: '/_php/t/i.php',
   data: {}
  }).then((response) => {
   document.querySelector('Div#main').innerHTML = response.data
@@ -13,41 +13,90 @@ function getTable(){
   let IoC
   aTr.forEach((v) => {
    v.childNodes.forEach((vv, kk) => {
-    if(kk === 0){ IoC = vv.innerHTML }
-    if(kk === 1){ v.setAttribute('onClick', `openForm('` + IoC + `')`) }
+    (kk === 0) && (IoC = vv.innerHTML);
+    (kk === 1) && (v.setAttribute('onClick', `openForm('` + IoC + `')`));
+
+    //<
+    const cContactPersons = vv.querySelectorAll('div')
+    if(cContactPersons.length > 0){
+        Array.from(cContactPersons).forEach((contactPerson) => {
+            if(contactPerson.dataset.date !== 'undefined'){
+                const a_date = contactPerson.dataset.date.split('-')
+
+                const then = new Date(a_date[0], a_date[1] - 1, a_date[2].substr(0, 2))
+                const now = new Date()
+                const difference = (now - then) / 1000 / 60 / 60 / 24
+                //console.log(difference)
+
+                if(difference > 45 && difference < 90){
+                    contactPerson.style.color = 'orange'
+                } else if(difference > 90){
+                    contactPerson.style.color = 'red'
+                }
+            }
+        })
+    }
+    //>
    })
   })
  }).then(() => {
   document.querySelectorAll('TBody > Tr').forEach((v) => {
-   let aTd = v.children
-   if(aTd[1].textContent === 'r'){ aTd[1].style.backgroundColor = 'rgba(255, 0, 0, 0.12)'; v.style.backgroundColor = 'rgba(255, 0, 0, 0.08)' }
-   else if(aTd[1].textContent === 'g'){ aTd[1].style.backgroundColor = 'rgba(0, 255, 0, 0.12)'; v.style.backgroundColor = 'rgba(0, 255, 0, 0.08)' }
-   else if(aTd[1].textContent === 'y'){ aTd[1].style.backgroundColor = 'rgba(255, 255, 0, 0.12)'; v.style.backgroundColor = 'rgba(255, 255, 0, 0.08)' }
-   else if(aTd[1].textContent === 's'){ aTd[1].style.backgroundColor = 'rgba(0, 0, 0, 0.12)'; v.style.backgroundColor = 'rgba(0, 0, 0, 0.08)' }
+      let aTd = v.children
+      if(aTd[1].textContent === 'r'){
+          aTd[1].style.backgroundColor = 'rgba(255, 0, 0, 0.12)';
+          v.style.backgroundColor = 'rgba(255, 0, 0, 0.08)'
+      } else if(aTd[1].textContent === 'g'){
+          aTd[1].style.backgroundColor = 'rgba(0, 255, 0, 0.12)';
+          v.style.backgroundColor = 'rgba(0, 255, 0, 0.08)'
+      } else if(aTd[1].textContent === 'y'){
+          aTd[1].style.backgroundColor = 'rgba(255, 255, 0, 0.12)';
+          v.style.backgroundColor = 'rgba(255, 255, 0, 0.08)'
+      } else if(aTd[1].textContent === 's'){
+          aTd[1].style.backgroundColor = 'rgba(0, 0, 0, 0.12)';
+          v.style.backgroundColor = 'rgba(0, 0, 0, 0.08)'
+      }
+  })
+ }).then(() => {
+  const cTh = document.querySelectorAll('THead Th')
+  Array.from(cTh).forEach((v) => {
+   v.addEventListener('click', () => { //console.log('v', v.innerHTML)
+    document.location.search = `?sort=${v.innerHTML}`
+   })
   })
  }).catch((error) => { console.log(error) })
 }
 
-function openForm(id){
+function openForm(id){ console.log('openForm(?) > ' + id);
  aside.classList.add('active')
 
  axios({
   method: 'post',
-  url: '/_php/forms/i.php',
+  url: '/_php/f/i.php',
   data: {id: id}
  }).then((response) => {
   asideDivDiv.innerHTML = response.data
-  getDataOfC( {IoC: id})
-  gsCommentaries(id)
-  getDataOfCP({IoC: id})
- }).then(() => { validation(id) }).catch((error) => { console.log(error) })
+ }).then(() => {
+  axios({
+   method: 'post',
+   url: '/_php/f/c/manufacturers.php',
+   data: {}
+  }).then((response) => {
+   document.querySelector('#t_manufacturers').innerHTML += response.data
+
+   getDataOfC({IoC: id})
+   gsCommentaries(id)
+   getDataOfCP({IoC: id})
+  }).then(() => {
+   validation(id)
+  }).catch((error) => { console.log(error) })
+ }).catch((error) => { console.log(error) })
 }
 
 function addCustomer(){
  axios({
   method: 'post',
-  url: `/_php/forms/c/u.php`,
-  data: {IoC: ''}
+  url: `/_php/f/c/u.php`,
+  data: {h_IoC: ''}
  }).then((response) => {
   openForm(response.data)
  }).catch((error) => { console.log(error) })
@@ -56,7 +105,7 @@ function addCustomer(){
 function getDataOfC(data){
  axios({
   method: 'post',
-  url: '/_php/forms/c/s.php',
+  url: '/_php/f/c/s.php',
   data
  }).then((response) => {
   document.querySelector('#h_IoC').value = response.data.Index
@@ -65,7 +114,7 @@ function getDataOfC(data){
   document.querySelector('#t_inn').value = (+response.data.INN === NaN) ? 0 : +response.data.INN
   document.querySelector('#ta_sites').value = response.data.Sites
   document.querySelector('#t_specialization').value = response.data.Specialization
-  document.querySelector('#ta_products').value = response.data.Products
+  document.querySelector('#t_manufacturers').value = response.data.Products
   document.querySelector('#s_status').value = response.data.IoS
   document.querySelector('#s_type').value = response.data.IoT
   //< Loyalty
@@ -107,7 +156,7 @@ function gsCommentaries(IoC = document.querySelector('#h_IoC').value){
 
  axios({
   method: 'post',
-  url: `/_php/forms/c_s/iu.php`,
+  url: `/_php/f/c_s/iu.php`,
   data: oData
  }).then((response) => {
   for(v of response.data){
@@ -125,26 +174,40 @@ document.addEventListener('keydown', (e) => { if(e.code === 'Enter' && e.altKey)
 function getDataOfCP(data){
  axios({
   method: 'post',
-  url: '/_php/forms/cp/s.php',
+  url: '/_php/f/cp/s.php',
   data
  }).then((response) => {
   document.querySelector('#h_IoCP').value = (response.data.Index === undefined) ? '' : response.data.Index
-  document.querySelector('#t_last').value = (response.data.Last === undefined) ? '' : response.data.Last
-  document.querySelector('#t_first').value = (response.data.First === undefined) ? '' : response.data.First
-  document.querySelector('#t_patronymic').value = (response.data.Patronymic === undefined) ? '' : response.data.Patronymic
+  //< Name
+  document.querySelector('#t_cp').value = ''
+  if(typeof response.data.Name === 'undefined'){
+      (typeof response.data.Last !== 'undefined') && (document.querySelector('#t_cp').value = response.data.Last)
+      if(typeof response.data.First !== 'undefined'){
+          (document.querySelector('#t_cp').value !== '') && (document.querySelector('#t_cp').value += ' ')
+          document.querySelector('#t_cp').value += response.data.First
+      }
+      if(typeof response.data.Patronymic !== 'undefined'){
+          (document.querySelector('#t_cp').value !== '') && (document.querySelector('#t_cp').value += ' ')
+          document.querySelector('#t_cp').value += response.data.Patronymic
+      }
+    } else{
+      document.querySelector('#t_cp').value = response.data.Name
+  }
+  //> Name
   document.querySelector('#t_position').value = (response.data.Position === undefined) ? '' : response.data.Position
   document.querySelector('#s_authority').value = (response.data.IoA === undefined) ? '' : response.data.IoA
   document.querySelector('#ta_phones').value = (response.data.Phones === undefined) ? '' : response.data.Phones
   document.querySelector('#ta_eMails').value = (response.data.eMails === undefined) ? '' : response.data.eMails
+  document.querySelector('#d_cpDate').value = (response.data.cpDate === '0000-00-00') ? '' : response.data.cpDate
 
+  //console.log('response.data', response.data)
   if(response.data['Group of current user'] !== 1){
-   if(response.data.Last !== ''){ document.querySelector('#t_last').setAttribute('disabled', 'true') }
-   if(response.data.First !== ''){ document.querySelector('#t_first').setAttribute('disabled', 'true') }
-   if(response.data.Patronymic !== ''){ document.querySelector('#t_patronymic').setAttribute('disabled', 'true') }
+   if(response.data.Name !== ''){ document.querySelector('#t_name').setAttribute('disabled', 'true') }
    if(response.data.Position !== ''){ document.querySelector('#t_position').setAttribute('disabled', 'true') }
    if(response.data.IoA !== ''){ document.querySelector('#s_authority').setAttribute('disabled', 'true') }
    if(response.data.Phones !== ''){ document.querySelector('#ta_phones').setAttribute('disabled', 'true') }
    if(response.data.eMails !== ''){ document.querySelector('#ta_eMails').setAttribute('disabled', 'true') }
+   if(response.data.cpDate !== '0000-00-00'){ document.querySelector('#d_cpDate').setAttribute('disabled', 'true') }
   }
 
   return {'IoCP': response.data.Index, 'IoCPs': response.data.IoCPs}
@@ -178,13 +241,23 @@ function getDataOfCP(data){
 }
 
 const updateForms = (A, B) => {
- let aElementsOfForm = document.querySelector(`Div#forms > Form:${A}st-of-type`).elements
+ let aElementsOfForm = document.querySelector(`div#forms > form:${A}st-of-type`).elements
+ //console.log('aElementsOfForm', aElementsOfForm)
+
  data = {}
- for(k in aElementsOfForm){ data[aElementsOfForm[k].name] = aElementsOfForm[k].value }
- if(B !== ''){ data.h_IoC = document.querySelector(`#h_IoC`).value }
+ for(k in aElementsOfForm){
+  if(aElementsOfForm[k].name === 's_manufacturers'){
+   data[aElementsOfForm[k].name] = Array.from(aElementsOfForm[k].options).filter(option => option.selected).map(option => option.value);
+  } else if(aElementsOfForm[k].name){
+   data[aElementsOfForm[k].name] = aElementsOfForm[k].value
+  }
+ }
+ (B !== '') && (data.h_IoC = document.querySelector(`#h_IoC`).value);
+ console.log(`updateForms > ${A} :`, data)
+
  axios({
   method: 'post',
-  url: `/_php/forms/${B}/u.php`,
+  url: `/_php/f/${B}/u.php`,
   data
  }).then((response) => {
   document.querySelector('#h_Io' + B.toUpperCase()).value = response.data
@@ -195,7 +268,10 @@ function updateC(){
  aside.classList.remove('active')
  getTable()
 }
-function updateCP(){ updateForms('la', 'cp') }
+function updateCP(){
+    updateForms('la', 'cp')
+    getTable()
+}
 
 document.addEventListener('mousedown', (e) => {
  if(e.target.closest('Div#aside') === null){
@@ -211,7 +287,7 @@ function validation(IoC){
   if(e.target.value.length === 10){
    axios({
     method: 'post',
-    url: `/_php/forms/validation/c.inn.php`,
+    url: `/_php/f/validation/c.inn.php`,
     data: {
      INN: e.target.value,
      IoC
@@ -229,6 +305,31 @@ function validation(IoC){
  document.querySelector('#t_inn').oninput = t_inn
  document.querySelector('#t_inn').onpaste = t_inn
  //> ИНН
+
+ //< Sites
+ let ta_sites = (e) => {
+  if(!(e.target.value === '')){
+   e.target.value = e.target.value.replace(/^http(s?):\/\//gi, '')
+   e.target.value = e.target.value.replace(/\/\//g, '')
+   e.target.value = e.target.value.replace(/www./gi, '')
+   e.target.value = e.target.value.replace(/\s/g, '\r\n')
+  }
+ }
+ document.querySelector('#ta_sites').onfocus = ta_sites
+ document.querySelector('#ta_sites').oninput = ta_sites
+ document.querySelector('#ta_sites').onpaste = ta_sites
+ //> Sites
+
+ //< eMails
+ let ta_eMails = (e) => {
+  if(!(e.target.value === '')){
+   e.target.value = e.target.value.replace(/\s/g, '\r\n')
+  }
+ }
+ document.querySelector('#ta_eMails').onfocus = ta_eMails
+ document.querySelector('#ta_eMails').oninput = ta_eMails
+ document.querySelector('#ta_eMails').onpaste = ta_eMails
+ //> eMails
 
  function toggleButton(){
   const button = document.querySelector('Form > Div > Button')

@@ -154,8 +154,8 @@ Form:nth-of-type(2) Div.buttons{ display: flex; justify-content: space-between }
    <textarea name='ta_sites' id='ta_sites'></textarea>
   </div>
   <div>
-   <label for='ta_products'>Продукт(-ы) [id через пробел]</label>
-   <textarea name='ta_products' id='ta_products'></textarea>
+   <label for='s_manufacturers'>Заинтересовавшие бренды</label>
+   <input name='t_manufacturers' id='t_manufacturers' required>
   </div>
   <div>
    <label for='s_type'>Тип</label>
@@ -190,6 +190,7 @@ Form:nth-of-type(2) Div.buttons{ display: flex; justify-content: space-between }
    </div>
 
    <input type='hidden' name='h_IoCP' id='h_IoCP'>
+<!--
    <div>
     <label for=''>Фамимлия</label>
     <input type='text' name='t_last' id='t_last' class='reset'>
@@ -202,6 +203,11 @@ Form:nth-of-type(2) Div.buttons{ display: flex; justify-content: space-between }
     <label for=''>Отчество</label>
     <input type='text' name='t_patronymic' id='t_patronymic' class='reset'>
    </div>
+-->
+      <div>
+          <label for=''>Контактное лицо</label>
+          <input type='text' name='t_cp' id='t_cp' class='reset'>
+      </div>
    <div>
     <label for=''>Должность</label>
     <input type='text' name='t_position' id='t_position' class='reset'>
@@ -218,10 +224,14 @@ Form:nth-of-type(2) Div.buttons{ display: flex; justify-content: space-between }
     <label for=''>eMail(s) </label>
     <textarea name='ta_eMails' id='ta_eMails'></textarea>
    </div>
+   <div>
+    <label for='d_cpDate'>Дата последнего общения</label>
+    <input type='date' name='d_cpDate' id='d_cpDate' class='reset'>
+   </div>
   </div>
 
   <div>
-   <button type='button' onClick='updateC()'>Сохранить</button>
+   <button type='button' onClick='updateCP(); updateC()'>Сохранить</button>
   </div>
  </form>
 </div>

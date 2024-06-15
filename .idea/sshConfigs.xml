@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SshConfigs">
+    <configs>
+      <sshConfig authType="PASSWORD" host="dlbxqp.myjino.ru" id="ce701023-ba45-4da4-a372-f8fdd90cbc27" port="2222" customName="jCRM.SS" nameFormat="CUSTOM" />
+      <sshConfig authType="PASSWORD" host="dlbxqp.myjino.ru" id="39d717f5-e543-44fb-a95a-30098943db81" port="2222" customName="jCRM.SS" nameFormat="CUSTOM" />
+    </configs>
+  </component>
+</project>

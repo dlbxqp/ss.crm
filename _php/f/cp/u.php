@@ -19,19 +19,19 @@ require "{$_SERVER['DOCUMENT_ROOT']}/_includes/validatingOfFields.inc";
 
 $indexOfContactPerson = $_POST['h_IoCP'];
 $indexOfCustomer = $_POST['h_IoC'];
-$lastName = validateText($_POST['t_last']);
-$firstName = validateText($_POST['t_first']);
+$name = validateText($_POST['t_cp']);
 $patronymic = validateText($_POST['t_patronymic']);
 $position = validateText($_POST['t_position']);
-$phones = validateNumbers($_POST['ta_phones']);
+$phones = /*validateNumbers(*/$_POST['ta_phones']/*)*/;
 $eMails = validateText($_POST['ta_eMails']);
+$cpDate = $_POST['d_cpDate'];
 $authority = (int)$_POST['s_authority'];
 
 
 
 #< New
 if($indexOfContactPerson == ''){
- $request = "SELECT `Index` FROM `contact_persones` WHERE `IoC` = '{$indexOfCustomer}' AND (`Last` = '' AND `First` = '') ORDER BY `Index` DESC LIMIT 1";
+ $request = "SELECT `Index` FROM `contact_persones` WHERE `IoC` = '{$indexOfCustomer}' AND `Name` = '' ORDER BY `Index` DESC LIMIT 1";
  $respond = mysqli_query($пксбд, $request) OR die($SQLError . mysqli_error($пксбд));
  if(mysqli_num_rows($respond) < 1){
   $indexOfContactPerson = base_convert(date('ymdHis'), 10, 16);
@@ -46,12 +46,11 @@ $request = <<<HD
 UPDATE `contact_persones`
 
 SET
- `Last` = '{$lastName}',
- `First` = '{$firstName}',
- `Patronymic` = '{$patronymic}',
+ `Name` = '{$name}',
  `Position` = '{$position}',
  `Phones` = '{$phones}',
  `eMails` = '{$eMails}',
+ `cpDate` = '{$cpDate}',
  `IoA` = '{$authority}',
  `IoC` = '{$indexOfCustomer}'
 
