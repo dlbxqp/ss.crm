@@ -43,4 +43,4 @@ while($aV = mysqli_fetch_assoc($respond)){
 
 
 
-die(json_encode($aCommentaries));
+exit(json_encode($aCommentaries));

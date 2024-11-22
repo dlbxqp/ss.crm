@@ -1,11 +1,13 @@
 const aside = document.querySelector('Body > Aside')
 const asideDivDiv = document.querySelector('Div#aside')
 
-function getTable(){
+let sc = 'de';
+
+function getTable(data = {}){ //console.log('data', data)
  axios({
   method: 'post',
   url: '/_php/t/i.php',
-  data: {}
+  data
  }).then((response) => {
   document.querySelector('Div#main').innerHTML = response.data
  }).then(() => {
@@ -21,7 +23,7 @@ function getTable(){
     if(cContactPersons.length > 0){
         Array.from(cContactPersons).forEach((contactPerson) => {
             if(contactPerson.dataset.date !== 'undefined'){
-                const a_date = contactPerson.dataset.date.split('-')
+                const a_date = (contactPerson.dataset.date && contactPerson.dataset.date.indexOf('-') > -1) ? contactPerson.dataset.date.split('-') : '&mdash;';
 
                 const then = new Date(a_date[0], a_date[1] - 1, a_date[2].substr(0, 2))
                 const now = new Date()
@@ -60,7 +62,11 @@ function getTable(){
   const cTh = document.querySelectorAll('THead Th')
   Array.from(cTh).forEach((v) => {
    v.addEventListener('click', () => { //console.log('v', v.innerHTML)
-    document.location.search = `?sort=${v.innerHTML}`
+    sc = (sc === 'de') ? 'a' : 'de'; console.log('sc', sc)
+    getTable({
+     sort : v.innerHTML,
+     sc
+    })
    })
   })
  }).catch((error) => { console.log(error) })
@@ -117,6 +123,7 @@ function getDataOfC(data){
   document.querySelector('#t_manufacturers').value = response.data.Products
   document.querySelector('#s_status').value = response.data.IoS
   document.querySelector('#s_type').value = response.data.IoT
+  document.querySelector('#s_manager').value = response.data.IoU
   //< Loyalty
   {
    const sLoyalty = document.querySelector('#s_loyalty')
@@ -199,6 +206,7 @@ function getDataOfCP(data){
   document.querySelector('#ta_phones').value = (response.data.Phones === undefined) ? '' : response.data.Phones
   document.querySelector('#ta_eMails').value = (response.data.eMails === undefined) ? '' : response.data.eMails
   document.querySelector('#d_cpDate').value = (response.data.cpDate === '0000-00-00') ? '' : response.data.cpDate
+  document.querySelector('#s_manager').value = (response.data.IoU === undefined) ? '' : response.data.IoU
 
   //console.log('response.data', response.data)
   if(response.data['Group of current user'] !== 1){
@@ -208,6 +216,7 @@ function getDataOfCP(data){
    if(response.data.Phones !== ''){ document.querySelector('#ta_phones').setAttribute('disabled', 'true') }
    if(response.data.eMails !== ''){ document.querySelector('#ta_eMails').setAttribute('disabled', 'true') }
    if(response.data.cpDate !== '0000-00-00'){ document.querySelector('#d_cpDate').setAttribute('disabled', 'true') }
+   if(response.data.IoU !== ''){ document.querySelector('#s_manager').setAttribute('disabled', 'true') }
   }
 
   return {'IoCP': response.data.Index, 'IoCPs': response.data.IoCPs}

@@ -31,7 +31,8 @@ SELECT
  
  `IoL`,
  `IoS`,
- `IoT`
+ `IoT`,
+ `IoU`
  
 FROM `customers`
 

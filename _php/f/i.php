@@ -3,10 +3,23 @@ session_start();
 
 $_POST = json_decode(file_get_contents('php://input'), true); //die('> <pre>' . print_r($_POST) . '</pre>');
 
-require "{$_SERVER[DOCUMENT_ROOT]}/_includes/options.inc";
-require "{$_SERVER[DOCUMENT_ROOT]}/_includes/db.2.inc";
+require "{$_SERVER['DOCUMENT_ROOT']}/_includes/options.inc";
+
 
 #< Customers
+require "{$_SERVER['DOCUMENT_ROOT']}/_includes/db.1.inc";
+ #< Managers
+$request = 'SELECT `Index`, `Name` FROM `users` WHERE `Accessibility` = 1 AND `Group` = 2';
+$respond = mysqli_query($пксбд, $request) OR die($SQLError . mysqli_error($пксбд));
+if(mysqli_num_rows($respond) > 0){
+ !isset($managers) && $managers = "<option value='2'>Жорик</option>";
+ while($aV = mysqli_fetch_assoc($respond)){
+  $managers .= "<option value='{$aV['Index']}'>{$aV['Name']}</option>";
+ }
+}
+ #> Managers
+
+require "{$_SERVER['DOCUMENT_ROOT']}/_includes/db.2.inc";
  #< Select of Loyalty
 $request = 'SELECT * FROM `0_loyalty`';
 $respond = mysqli_query($пксбд, $request) OR die($SQLError . mysqli_error($пксбд));
@@ -173,6 +186,10 @@ Form:nth-of-type(2) Div.buttons{ display: flex; justify-content: space-between }
    <label for='s_status'>Статус</label>
    <select name='s_status' id='s_status' required><option disabled selected>Выбор обязателен</option><?=$status?></select>
   </div>
+  <div>
+   <label for='s_manager'>Менеджер</label>
+   <select name='s_manager' id='s_manager' required><option disabled selected>Выбор обязателен</option><?=$managers?></select>
+  </div>
   <div id='commentaries'>
    <label for='ta_commentaries'>Комментарии (Сохранить > Alt + Enter)</label>
    <div></div>
@@ -190,38 +207,24 @@ Form:nth-of-type(2) Div.buttons{ display: flex; justify-content: space-between }
    </div>
 
    <input type='hidden' name='h_IoCP' id='h_IoCP'>
-<!--
    <div>
-    <label for=''>Фамимлия</label>
-    <input type='text' name='t_last' id='t_last' class='reset'>
+    <label for='t_cp'>Контактное лицо</label>
+    <input type='text' name='t_cp' id='t_cp' class='reset'>
    </div>
    <div>
-    <label for=''>Имя</label>
-    <input type='text' name='t_first' id='t_first' class='reset'>
-   </div>
-   <div>
-    <label for=''>Отчество</label>
-    <input type='text' name='t_patronymic' id='t_patronymic' class='reset'>
-   </div>
--->
-      <div>
-          <label for=''>Контактное лицо</label>
-          <input type='text' name='t_cp' id='t_cp' class='reset'>
-      </div>
-   <div>
-    <label for=''>Должность</label>
+    <label for='t_position'>Должность</label>
     <input type='text' name='t_position' id='t_position' class='reset'>
    </div>
    <div>
-    <label for=''>Принятие решения</label>
+    <label for='s_authority'>Принятие решения</label>
     <select name='s_authority' id='s_authority' required><option disabled selected>Выбор обязателен</option><?=$authority?></select>
    </div>
    <div>
-    <label for=''>Телефон(-ы)</label>
+    <label for='ta_phones'>Телефон(-ы)</label>
     <textarea name='ta_phones' id='ta_phones'></textarea>
    </div>
    <div>
-    <label for=''>eMail(s) </label>
+    <label for='ta_eMails'>eMail(s)</label>
     <textarea name='ta_eMails' id='ta_eMails'></textarea>
    </div>
    <div>

@@ -28,8 +28,7 @@ $manufacturers = validateAll($_POST['t_manufacturers']); //implode('|', $_POST['
 $loyalty = (int)$_POST['s_loyalty'];
 $status = (int)$_POST['s_status'];
 $type = (int)$_POST['s_type'];
-
-
+$manager = (int)$_POST['s_manager'];
 
 
 #< New
@@ -53,15 +52,16 @@ $request = <<<HD
 UPDATE `customers`
 
 SET
-`Name` = '{$name}',
-`City` = '{$city}',
-`INN` = {$inn},
-`Sites` = '{$sites}',
-`Specialization` = '{$specialization}',
-`Products` = '{$manufacturers}',
-`IoL` = '{$loyalty}',
-`IoS` = '{$status}',
-`IoT` = '{$type}'
+ `Name` = '{$name}',
+ `City` = '{$city}',
+ `INN` = {$inn},
+ `Sites` = '{$sites}',
+ `Specialization` = '{$specialization}',
+ `Products` = '{$manufacturers}',
+ `IoL` = '{$loyalty}',
+ `IoS` = '{$status}',
+ `IoT` = '{$type}',
+ `IoU` = '{$manager}'
 
 WHERE `Index` = '{$indexOfCustomer}'
 HD;
@@ -69,4 +69,4 @@ mysqli_query($пксбд, $request) OR die($SQLError . mysqli_error($пксбд)
 
 
 
-die(json_encode($indexOfCustomer));
+exit(json_encode($indexOfCustomer));

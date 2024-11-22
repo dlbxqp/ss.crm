@@ -60,4 +60,4 @@ mysqli_query($пксбд, $request) OR die($SQLError . mysqli_error($пксбд)
 
 
 
-die(json_encode($indexOfContactPerson));
+exit(json_encode($indexOfContactPerson));

@@ -9,10 +9,25 @@ if(empty($_SESSION['3aмoк'])){
 }
 //> Замок
 
+($_SERVER['REQUEST_METHOD'] === 'POST') && ($_POST = json_decode( file_get_contents('php://input'), true ));
 require "{$_SERVER['DOCUMENT_ROOT']}/_includes/options.inc";
+
+
+//< get user
+require "{$_SERVER['DOCUMENT_ROOT']}/_includes/db.1.inc";
+$aUsers = [];
+$request = "SELECT `Index`, `Name` FROM `users`";
+$respond = mysqli_query($GLOBALS['пксбд'], $request) or die($GLOBALS['SQLError'] . mysqli_error($GLOBALS['пксбд']));
+while($aV = mysqli_fetch_assoc($respond)){
+    $aUsers[ $aV['Index'] ] = $aV['Name'];
+}
+function getUser($IoU, $a){
+    return '<div>' . (($a[ $IoU ] != '') ? $a[ $IoU ] : '&mdash;') . "</div>\r\n";
+}
+//> get user
+
+
 require "{$_SERVER['DOCUMENT_ROOT']}/_includes/db.2.inc";
-
-
 function getContactPersones($IoC){
     $result = '';
     $request = <<<HD
@@ -32,7 +47,20 @@ HD;
     return $result;
 }
 
+#< SQL ORDER_BY
+$orderBy = '`customers`.`Index`';
+if( isset($_POST['sort']) ){
+    $orderBy = "`{$_POST['sort']}`";
+}
+#> SQL ORDER_BY
 
+#< SQL SC
+$sc = 'DESC';
+if( isset($_POST['sc']) ){
+    $sc = strtoupper($_POST['sc']);
+    $sc = "{$sc}SC";
+}
+#> SQL SC
 $request = <<<HD
 SELECT
  `customers`.`Index`,
@@ -49,23 +77,31 @@ SELECT
  `customers`.`Products` AS ``,
 */
  `customers`.`Index` AS `Контактное лицо`,
+ -- `contact_persones`.`IoU` AS `Менеджер`,
+ `customers`.`IoU` AS `Менеджер`,
  `0_status`.`Name` AS `Статус`,
  `0_type`.`Name` AS `Тип`
+
 
 FROM `customers`
 LEFT JOIN `0_loyalty` ON `0_loyalty`.`Index` = `customers`.`IoL`
 LEFT JOIN `0_status` ON `0_status`.`Index` = `customers`.`IoS`
 LEFT JOIN `0_type` ON `0_type`.`Index` = `customers`.`IoT`
+-- LEFT JOIN `contact_persones` ON `contact_persones`.`IoC` = `customers`.`Index`
 
 WHERE `customers`.`Accessibility` = 1
 
-ORDER BY `customers`.`Index` DESC
+ORDER BY {$orderBy} {$sc}
 HD;
 $respond = mysqli_query($GLOBALS['пксбд'], $request) OR die($GLOBALS['SQLError'] . mysqli_error($GLOBALS['пксбд']));
 while($aV = mysqli_fetch_assoc($respond)){
  foreach($aV AS $k => $v){
   (!isset($tr['thead'])) && ($th .= "<th>{$k}</th>");
-  ($k == 'Контактное лицо') && ($v = getContactPersones($v));
+  if($k == 'Контактное лицо'){
+      $v = getContactPersones($v);
+  } else if($k == 'Менеджер'){
+      $v = getUser($v, $aUsers);
+  }
   $td .= '<td>' . $v . '</td>';
  }
  (!isset($tr['thead'])) && ($tr['thead'] .= "<tr>$th</tr>"); unset($th);
@@ -79,6 +115,9 @@ unset($tr)
 
 
 <style>
+Table Tr > Th{
+    cursor: pointer;
+}
 Table Tr > Td{ border: none; border-bottom: 1px dotted white }
 Table Tr:hover > Td{ border-bottom-color: black }
 
